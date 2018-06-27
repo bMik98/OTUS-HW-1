@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd">
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:application.properties"/>
 
     <bean id="questionDao" class="ru.otus.spring.quiz.dao.CsvQuestionDao">
-        <!--<property name="age" value="199"/>-->
+        <constructor-arg name="questionsPerSession" value="${questions-per-quiz}" type="int"/>
+        <constructor-arg name="sourceFile" value="${questions-csv-file}" type="java.lang.String"/>
     </bean>
 
-    <bean id="personService" class="ru.otus.spring01.service.PersonServiceImpl">
-        <property name="dao" ref="personDao" />
+    <bean id="interactionService" class="ru.otus.spring.quiz.service.ConsoleInteractionService">
+    </bean>
+
+    <bean id="reportService" class="ru.otus.spring.quiz.service.ConsoleReportService">
+    </bean>
+
+    <bean id="quizService" class="ru.otus.spring.quiz.service.QuizService">
+        <constructor-arg name="interactionService" ref="interactionService"/>
+        <constructor-arg name="questionDao" ref="questionDao"/>
+        <constructor-arg name="reportService" ref="reportService"/>
     </bean>
 </beans>

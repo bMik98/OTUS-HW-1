@@ -9,9 +9,10 @@ public class Application {
         new Application().run();
     }
 
-    public void run() {
+    private void run() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
         QuizService quizService = context.getBean(QuizService.class);
         quizService.startQuiz();
+        System.out.println("Finish");
     }
 }
