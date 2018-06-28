@@ -12,4 +12,8 @@ import java.util.List;
 public class Question {
     private String text;
     private List<Answer> answers;
+
+    public int numberOfRightAnswers() {
+        return (int) answers.stream().filter(Answer::isCorrect).count();
+    }
 }
