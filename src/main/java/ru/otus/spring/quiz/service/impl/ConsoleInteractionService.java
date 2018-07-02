@@ -26,29 +26,29 @@ public class ConsoleInteractionService implements InteractionService {
         System.out.println("There are two kinds of questions: ");
         System.out.println(" 1. having one correct answer. In this case you have to select one option.");
         System.out.println(" 2. having the number of correct answers. To answer you have to select all of them.");
-        System.out.println("To answer you should type the id or ids of the questions.");
+        System.out.println("Type the id of the answer to select it or 'q' to finish and press Enter.");
         System.out.println("So, lets begin!");
         System.out.println("--------------------");
         questions.forEach(this::ask);
     }
 
     private void ask(Question question) {
-        showQuestionTitle(question);
-        showAnswerOptions(question);
-
-
+        boolean multiOption = (question.numberOfRightAnswers() > 1);
+        showQuestionText(question, multiOption);
+        showPossibleAnswers(question);
+        makeSelection(question, multiOption);
     }
 
-    private void showQuestionTitle(Question question) {
+    private void showQuestionText(Question question, boolean multiOption) {
         System.out.println(question.getText());
-        if (question.numberOfRightAnswers() > 1) {
+        if (multiOption) {
             System.out.println("(select all right answers)");
         } else {
             System.out.println("(select only one right answer)");
         }
     }
 
-    private void showAnswerOptions(Question question) {
+    private void showPossibleAnswers(Question question) {
         for (int i = 1; i <= question.getAnswers().size(); i++) {
             Answer answer = question.getAnswers().get(i);
             String selected = (answer.isSelected()) ? "(selected) " : "";
@@ -56,28 +56,31 @@ public class ConsoleInteractionService implements InteractionService {
         }
     }
 
-    private int makeSelection(int maxValue) {
-        int result = -1;
+    private void makeSelection(Question question, boolean multiOption) {
+        int maxValue = question.getAnswers().size();
         boolean done = false;
         while (!done) {
-            System.out.print("Select: ");
-            Integer selected = getInteger();
-            if (selected != null && selected >= 0 && selected <= maxValue) {
-                result = selected;
-                done = true;
+            System.out.print("Your choice: ");
+            String input = System.console().readLine();
+            if (input != null && !"".equals(input.trim())) {
+                if ("q".equalsIgnoreCase(input)) {
+                    done = getConfirmation("Transmit your answer? (y/n): ");
+                } else {
+                    Integer selectedIndex = getIndexOfAnswer(input, maxValue);
+                    if (selectedIndex != null) {
+                        boolean currentSelection = question.getAnswers().get(selectedIndex).isSelected();
+                        question.getAnswers().get(selectedIndex).setSelected(!currentSelection);
+                    }
+                }
             }
         }
-        return result;
     }
 
-    private Integer getInteger() {
-        String input = System.console().readLine();
-        if (input == null || "".equals(input.trim())) {
-            return null;
-        }
+    private Integer getIndexOfAnswer(String input, int maxValue) {
         Integer result;
         try {
-            result = Integer.parseInt(input);
+            Integer value = Integer.valueOf(input);
+            result = (value > 0 && value <= maxValue) ? value : null;
         } catch (NumberFormatException e) {
             result = null;
         }
@@ -87,6 +90,6 @@ public class ConsoleInteractionService implements InteractionService {
     private boolean getConfirmation(String message) {
         System.out.print(message);
         String confirmation = System.console().readLine();
-        return confirmation.equalsIgnoreCase("y");
+        return "y".equalsIgnoreCase(confirmation);
     }
 }
