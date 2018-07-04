@@ -5,6 +5,7 @@ import ru.otus.spring.quiz.domain.Question;
 import ru.otus.spring.quiz.service.InteractionService;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class ConsoleInteractionService implements InteractionService {
 
@@ -13,7 +14,8 @@ public class ConsoleInteractionService implements InteractionService {
         boolean confirmed = false;
         while ((result != null && result.isEmpty()) || !confirmed) {
             System.out.print("Enter your full name, please: ");
-            result = System.console().readLine();
+            Scanner scanner = new Scanner(System.in);
+            result = scanner.nextLine();
             if (result != null && !"".equals(result.trim())) {
                 confirmed = getConfirmation(String.format("Your name is %s? (y/n): ", result));
             }
@@ -28,7 +30,6 @@ public class ConsoleInteractionService implements InteractionService {
         System.out.println(" 2. having the number of correct answers. To answer you have to select all of them.");
         System.out.println("Type the id of the answer to select it or 'q' to finish and press Enter.");
         System.out.println("So, lets begin!");
-        System.out.println("--------------------");
         questions.forEach(this::ask);
     }
 
@@ -40,6 +41,7 @@ public class ConsoleInteractionService implements InteractionService {
     }
 
     private void showQuestionText(Question question, boolean multiOption) {
+        System.out.println("--------------------");
         System.out.println(question.getText());
         if (multiOption) {
             System.out.println("(select all right answers)");
@@ -49,10 +51,10 @@ public class ConsoleInteractionService implements InteractionService {
     }
 
     private void showPossibleAnswers(Question question) {
-        for (int i = 1; i <= question.getAnswers().size(); i++) {
+        for (int i = 0; i < question.getAnswers().size(); i++) {
             Answer answer = question.getAnswers().get(i);
             String selected = (answer.isSelected()) ? "(selected) " : "";
-            System.out.printf(" %d - %s%s", i, selected, answer);
+            System.out.printf(" %d - %s%s %n", i, selected, answer.getText());
         }
     }
 
@@ -61,7 +63,8 @@ public class ConsoleInteractionService implements InteractionService {
         boolean done = false;
         while (!done) {
             System.out.print("Your choice: ");
-            String input = System.console().readLine();
+            Scanner scanner = new Scanner(System.in);
+            String input = scanner.nextLine();
             if (input != null && !"".equals(input.trim())) {
                 if ("q".equalsIgnoreCase(input)) {
                     done = getConfirmation("Transmit your answer? (y/n): ");
@@ -89,7 +92,8 @@ public class ConsoleInteractionService implements InteractionService {
 
     private boolean getConfirmation(String message) {
         System.out.print(message);
-        String confirmation = System.console().readLine();
+        Scanner scanner = new Scanner(System.in);
+        String confirmation = scanner.nextLine();
         return "y".equalsIgnoreCase(confirmation);
     }
 }

@@ -4,7 +4,7 @@ import lombok.NonNull;
 import ru.otus.spring.quiz.dao.QuestionDao;
 import ru.otus.spring.quiz.domain.Question;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FixedQuestionService extends AbstractQuestionService {
@@ -15,6 +15,15 @@ public class FixedQuestionService extends AbstractQuestionService {
 
     @Override
     public List<Question> generate() {
-        return Collections.emptyList();
+        List<Question> result = new ArrayList<>();
+        try {
+            List<Question> dbQuestions = questionDao.findAll();
+            for (int i = 0; i < questionsPerSession; i++) {
+                result.add(dbQuestions.get(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }
