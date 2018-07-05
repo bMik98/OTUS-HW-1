@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ReportService {
 
-    void showReport(String studentName, List<Question> answers);
+    void showReport(String studentName, List<Question> answeredQuestions);
 }
