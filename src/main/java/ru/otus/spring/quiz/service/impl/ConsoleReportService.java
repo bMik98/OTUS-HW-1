@@ -20,7 +20,7 @@ public class ConsoleReportService implements ReportService {
         System.out.println("==================================================");
     }
 
-    private boolean checkAnswers(List<Answer> answers) {
+    boolean checkAnswers(List<Answer> answers) {
         for (Answer answer : answers) {
             boolean isOk = (answer.isCorrect() == answer.isSelected());
             if (!isOk) {

@@ -26,14 +26,13 @@ public class CsvQuestionDao implements QuestionDao {
         CSVReader reader = new CSVReader(new FileReader(sourceFile));
         List<String[]> entries = reader.readAll();
         entries.forEach(entry -> {
-            Question question = new Question(entry[0]);
+            Question question = new Question(entry[0].trim());
             for (int i = 1; i < entry.length - 1; i = i + 2) {
-                Answer answer = new Answer(entry[i], Boolean.valueOf(entry[i + 1]));
+                Answer answer = new Answer(entry[i].trim(), Boolean.valueOf(entry[i + 1].trim()));
                 question.addAnswer(answer);
             }
             result.add(question);
         });
-        System.out.println("-----------------" + result.size());
         return result;
     }
 }
