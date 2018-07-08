@@ -1,17 +1,14 @@
 package ru.otus.spring.quiz.domain;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 public class Question {
-
-    private String text;
-    private List<Answer> answers = new ArrayList<>();
+    private final String text;
+    private final List<Answer> answers = new ArrayList<>();
 
     public Question(String text) {
         this.text = text;

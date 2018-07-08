@@ -10,16 +10,15 @@ import java.util.Scanner;
 public class ConsoleInteractionService implements InteractionService {
 
     public String obtainStudentName() {
-        String result = "";
+        String result;
         boolean confirmed = false;
-        while ((result != null && result.isEmpty()) || !confirmed) {
+        do {
             System.out.print("Enter your full name, please: ");
-            Scanner scanner = new Scanner(System.in);
-            result = scanner.nextLine();
-            if (result != null && !"".equals(result.trim())) {
+            result = new Scanner(System.in).nextLine();
+            if (result != null && !result.trim().isEmpty()) {
                 confirmed = getConfirmation(String.format("Your name is %s?", result));
             }
-        }
+        } while (!confirmed);
         return result;
     }
 
@@ -35,18 +34,24 @@ public class ConsoleInteractionService implements InteractionService {
 
     private void ask(Question question) {
         boolean multiOption = (question.numberOfRightAnswers() > 1);
-        boolean done = false;
-        while (!done) {
+        Integer selectedIndex;
+        do {
             showQuestionText(question, multiOption);
             showPossibleAnswers(question);
-            Integer selectedIndex = makeSelection(question, multiOption);
-            if (selectedIndex == null) {
-                done = true;
-            } else {
-                boolean currentSelection = question.getAnswers().get(selectedIndex).isSelected();
-                question.getAnswers().get(selectedIndex).setSelected(!currentSelection);
-            }
+            selectedIndex = makeSelection(question);
+            inverseAnswerSelection(question, selectedIndex);
+        } while (selectedIndex != null);
+    }
+
+    private void inverseAnswerSelection(Question question, Integer answerIndex) {
+        if (answerIndex != null) {
+            inverseAnswerSelection(question.getAnswers().get(answerIndex));
         }
+    }
+
+    private void inverseAnswerSelection(Answer answer) {
+        boolean currentSelection = answer.isSelected();
+        answer.setSelected(!currentSelection);
     }
 
     private void showQuestionText(Question question, boolean multiOption) {
@@ -67,7 +72,7 @@ public class ConsoleInteractionService implements InteractionService {
         }
     }
 
-    private Integer makeSelection(Question question, boolean multiOption) {
+    private Integer makeSelection(Question question) {
         int maxValue = question.getAnswers().size() - 1;
         boolean done = false;
         Integer result = null;
@@ -100,7 +105,7 @@ public class ConsoleInteractionService implements InteractionService {
         System.out.print(message + " (y/n) [y]: ");
         Scanner scanner = new Scanner(System.in);
         String confirmation = scanner.nextLine();
-        if (confirmation == null || "".equals(confirmation)) {
+        if (confirmation == null || confirmation.isEmpty()) {
             return true;
         }
         return "y".equalsIgnoreCase(confirmation);
