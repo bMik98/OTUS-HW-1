@@ -1,0 +1,6 @@
+Q 0,A 00, false,A 01,true
+Q 1,A 10, true,A 11,false
+Q 2,A 20, false,A 21,true,A 22,false
+Q 3,A 30, true,A 31,false,A 32,true
+Q 4,A 40, false,A 41,false,A 42,false,A 43,true
+Q 5,A 50, true,A 51,true,A 52,true,A 53,false
