@@ -3,32 +3,33 @@ package ru.otus.spring.quiz.service.impl;
 import ru.otus.spring.quiz.domain.Answer;
 import ru.otus.spring.quiz.domain.Question;
 import ru.otus.spring.quiz.service.InteractionService;
+import ru.otus.spring.quiz.service.MessageService;
 
 import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleInteractionService implements InteractionService {
+    private final MessageService messageService;
+
+    public ConsoleInteractionService(MessageService messageService) {
+        this.messageService = messageService;
+    }
 
     public String obtainStudentName() {
         String result;
         boolean confirmed = false;
         do {
-            System.out.print("Enter your full name, please: ");
+            System.out.print(messageService.namePrompt());
             result = new Scanner(System.in).nextLine();
             if (result != null && !result.trim().isEmpty()) {
-                confirmed = getConfirmation(String.format("Your name is %s?", result));
+                confirmed = getConfirmation(messageService.nameConfirm(result));
             }
         } while (!confirmed);
         return result;
     }
 
     public void fillAnswers(List<Question> questions) {
-        System.out.printf("Given quiz consists %d questions. %n", questions.size());
-        System.out.println("There are two kinds of questions: ");
-        System.out.println(" 1. having one correct answer. In this case you have to select one option.");
-        System.out.println(" 2. having the number of correct answers. To answer you have to select all of them.");
-        System.out.println("Type the id of the answer and Enter to select it or nothing and Enter to finish.");
-        System.out.println("So, lets begin!");
+        System.out.println(messageService.startExplanation(questions.size()));
         questions.forEach(this::ask);
     }
 
@@ -58,9 +59,9 @@ public class ConsoleInteractionService implements InteractionService {
         System.out.println("--------------------------------------------------");
         System.out.println(question.getText());
         if (multiOption) {
-            System.out.println("(select all right answers)");
+            System.out.println(messageService.selectMulti());
         } else {
-            System.out.println("(select only one right answer)");
+            System.out.println(messageService.selectOne());
         }
     }
 
@@ -77,14 +78,14 @@ public class ConsoleInteractionService implements InteractionService {
         boolean done = false;
         Integer result = null;
         while (!done) {
-            System.out.printf("Type the answer id (from 0 to %d) or nothing and press Enter: ", maxValue);
+            System.out.print(messageService.answerPrompt(maxValue));
             Scanner scanner = new Scanner(System.in);
             String input = scanner.nextLine();
-            if (input != null && !"".equals(input.trim())) {
+            if (input != null && !input.trim().isEmpty()) {
                 result = getIndexOfAnswer(input, maxValue);
                 done = (result != null);
             } else {
-                done = getConfirmation("The answer to this question is completed?");
+                done = getConfirmation(messageService.answerConfirm());
             }
         }
         return result;
@@ -102,12 +103,12 @@ public class ConsoleInteractionService implements InteractionService {
     }
 
     private boolean getConfirmation(String message) {
-        System.out.print(message + " (y/n) [y]: ");
+        System.out.printf(message + " (1-%s / 0-%s) [1]: ", messageService.yes(), messageService.no());
         Scanner scanner = new Scanner(System.in);
         String confirmation = scanner.nextLine();
         if (confirmation == null || confirmation.isEmpty()) {
             return true;
         }
-        return "y".equalsIgnoreCase(confirmation);
+        return "1".equalsIgnoreCase(confirmation);
     }
 }

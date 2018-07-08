@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.otus.spring.quiz.dao.QuestionDao;
 import ru.otus.spring.quiz.service.InteractionService;
+import ru.otus.spring.quiz.service.MessageService;
 import ru.otus.spring.quiz.service.QuestionService;
 import ru.otus.spring.quiz.service.ReportService;
 import ru.otus.spring.quiz.service.impl.ConsoleInteractionService;
@@ -29,12 +30,12 @@ public class AppConfig {
     }
 
     @Bean
-    public InteractionService interactionService() {
-        return new ConsoleInteractionService();
+    public InteractionService interactionService(MessageService messageService) {
+        return new ConsoleInteractionService(messageService);
     }
 
     @Bean
-    public ReportService reportService() {
-        return new ConsoleReportService();
+    public ReportService reportService(MessageService messageService) {
+        return new ConsoleReportService(messageService);
     }
 }
