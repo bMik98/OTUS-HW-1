@@ -8,7 +8,7 @@ public abstract class AbstractQuestionService implements QuestionService {
     protected final QuestionDao questionDao;
     protected final int questionsPerSession;
 
-    public AbstractQuestionService(@NonNull QuestionDao questionDao, int questionsPerSession) {
+    public AbstractQuestionService(QuestionDao questionDao, int questionsPerSession) {
         this.questionDao = questionDao;
         this.questionsPerSession = questionsPerSession;
         if (questionsPerSession < 1) {
