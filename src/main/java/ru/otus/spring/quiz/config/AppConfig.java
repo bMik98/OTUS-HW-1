@@ -3,6 +3,7 @@ package ru.otus.spring.quiz.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import ru.otus.spring.quiz.dao.QuestionDao;
 import ru.otus.spring.quiz.service.InteractionService;
 import ru.otus.spring.quiz.service.MessageService;
@@ -14,9 +15,10 @@ import ru.otus.spring.quiz.service.impl.FixedQuestionService;
 import ru.otus.spring.quiz.service.impl.RandomQuestionService;
 
 @Configuration
+@PropertySource("classpath:/application.properties")
 public class AppConfig {
 
-    @Value("${questions-csv-file:5}")
+    @Value("${questions-per-quiz}")
     private int questionsPerSession;
 
     @Bean

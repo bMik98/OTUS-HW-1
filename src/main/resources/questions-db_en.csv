@@ -1,0 +1,10 @@
+Question 1?,wrong answer 1-1,	false,right answer 1-2,true
+Question 2?,right answer 2-1,	true,wrong answer 2-2,false
+Question 3?,wrong answer 3-1,	false,wrong answer 3-2,false,right answer 3-1,true
+Question 4?,right answer 4-1,	true,right answer 4-2,true,wrong answer 4-3,false
+Question 5?,wrong answer 5-1,false,wrong answer 5-2,false,wrong answer 5-3,false,right answer 5-4,true
+Question 6?,right answer 6-1,	true,right answer 6-2,true,wrong answer 6-3,false,wrong answer 6-4,false
+Question 7?,right answer 7-1,	true,right answer 7-2,true,wrong answer 7-3,false,wrong answer 7-4,false
+Question 8?,right answer 8-1,	true,right answer 8-2,true,wrong answer 8-3,false,wrong answer 8-4,false
+Question 9?,right answer 9-1,	true,right answer 9-2,true,wrong answer 9-3,false,wrong answer 9-4,false
+Question 10?,right answer 10-1,true,right answer 10-2,true,wrong answer 10-3,false,wrong answer 10-4,false
