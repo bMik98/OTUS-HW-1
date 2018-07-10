@@ -17,7 +17,7 @@ public class ConsoleReportServiceTest {
 
     @Before
     public void setUp() {
-        reportService = new ConsoleReportService();
+        reportService = new ConsoleReportService(null);
     }
 
     @Test
