@@ -1,0 +1,11 @@
+general:
+    #Number of questions for each quiz session
+    questions-per-quiz: 5
+
+    #Application language (ru, en)
+    application-language: en
+
+#The paths to the question files
+question-files:
+    ru: /test-questions-db-ru.csv
+    en: /test-questions-db-en.csv

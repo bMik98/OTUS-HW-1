@@ -2,11 +2,12 @@ package ru.otus.spring.quiz.dao;
 
 import com.opencsv.CSVReader;
 import lombok.NonNull;
+import org.springframework.core.io.ClassPathResource;
 import ru.otus.spring.quiz.domain.Answer;
 import ru.otus.spring.quiz.domain.Question;
 
-import java.io.File;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,15 +16,14 @@ public class CsvQuestionDao implements QuestionDao {
 
     public CsvQuestionDao(@NonNull String sourceFile) {
         this.sourceFile = sourceFile;
-        if (!new File(sourceFile).exists()) {
-            throw new IllegalArgumentException("The source file '" + sourceFile + "' must exist");
-        }
     }
 
     @Override
     public List<Question> findAll() throws Exception {
         final List<Question> result = new ArrayList<>();
-        CSVReader reader = new CSVReader(new FileReader(sourceFile));
+        ClassPathResource classPathResource = new ClassPathResource(sourceFile);
+        InputStream inputStream = classPathResource.getInputStream();
+        CSVReader reader = new CSVReader(new InputStreamReader(inputStream, "UTF-8"));
         List<String[]> entries = reader.readAll();
         entries.forEach(entry -> {
             Question question = new Question(entry[0].trim());
