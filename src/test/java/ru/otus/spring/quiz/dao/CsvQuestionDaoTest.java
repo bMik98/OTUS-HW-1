@@ -17,8 +17,7 @@ public class CsvQuestionDaoTest {
 
     @Before
     public void setUp() {
-        String file = this.getClass().getClassLoader().getResource("test-questions-db.csv").getFile();
-        dao = new CsvQuestionDao(file);
+        dao = new CsvQuestionDao("/test-questions-db-en.csv");
     }
 
     @Test

@@ -1,30 +1,29 @@
 package ru.otus.spring.quiz;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import ru.otus.spring.quiz.service.QuizService;
 
-@Configuration
-@ComponentScan
-public class Application {
+@SpringBootApplication
+@EnableConfigurationProperties
+public class Application implements CommandLineRunner {
+
+    private final QuizService quizService;
+
+    @Autowired
+    public Application(QuizService quizService) {
+        this.quizService = quizService;
+    }
 
     public static void main(String[] args) {
-        new Application().run();
+        SpringApplication.run(Application.class, args);
     }
 
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-        return new PropertySourcesPlaceholderConfigurer();
-    }
-
-    private void run() {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(Application.class);
-        context.refresh();
-        QuizService quizService = context.getBean(QuizService.class);
+    @Override
+    public void run(String... args) {
         quizService.startQuiz();
     }
 }
