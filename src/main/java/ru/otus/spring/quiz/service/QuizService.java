@@ -22,6 +22,10 @@ public class QuizService {
 
     public void startQuiz() {
         String studentName = interactionService.obtainStudentName();
+        startQuiz(studentName);
+    }
+
+    public void startQuiz(String studentName) {
         List<Question> questions = questionService.generate();
         interactionService.fillAnswers(questions);
         reportService.showReport(studentName, questions);
